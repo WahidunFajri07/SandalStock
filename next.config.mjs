@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
-};
+  serverExternalPackages: ['mysql2', 'jspdf', 'jspdf-autotable', 'xlsx'],
+}
 
-export default nextConfig;
+export default nextConfig
