@@ -517,7 +517,7 @@ export default function DashboardPage() {
   useEffect(() => { load() }, [load])
 
   const stats = data?.stats
-  const currentStock = stats ? Number(stats.total_in) - Number(stats.total_sold) : null
+  const currentStock = stats ? Number(stats.current_stock) : null
 
   return (
     <div className="space-y-8 animate-soft-in">

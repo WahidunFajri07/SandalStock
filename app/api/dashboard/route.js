@@ -15,7 +15,13 @@ export const GET = auth(async function GET(request) {
         (SELECT COUNT(*) FROM categories) AS categories,
         (SELECT COUNT(*) FROM sandals) AS skus,
         COALESCE((SELECT SUM(quantity) FROM stock_in),   0) AS total_in,
-        COALESCE((SELECT SUM(quantity) FROM stock_sold), 0) AS total_sold
+        COALESCE((SELECT SUM(quantity) FROM stock_sold), 0) AS total_sold,
+        COALESCE((
+          SELECT SUM(COALESCE(si.qty, 0) - COALESCE(ss.qty, 0))
+          FROM sandals s
+          LEFT JOIN (SELECT sandal_id, SUM(quantity) qty FROM stock_in  GROUP BY sandal_id) si ON si.sandal_id = s.id
+          LEFT JOIN (SELECT sandal_id, SUM(quantity) qty FROM stock_sold GROUP BY sandal_id) ss ON ss.sandal_id = s.id
+        ), 0) AS current_stock
     `)
 
     // 2. Stock per category
@@ -76,7 +82,7 @@ export const GET = auth(async function GET(request) {
     return Response.json({
       stats: {
         ...statsRow,
-        current_stock: Number(statsRow.total_in) - Number(statsRow.total_sold),
+        current_stock: Number(statsRow.current_stock),
       },
       categoryStock: categoryStock.map(r => ({ ...r, stock: Number(r.stock) })),
       trendIn:   trendIn.map(r   => ({ day: r.day?.toISOString?.()?.slice(0,10) ?? r.day, qty: Number(r.qty) })),
