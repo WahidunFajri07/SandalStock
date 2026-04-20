@@ -5,7 +5,6 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Instagram } from 'lucide-react'
 import AnimatedBackground from '@/components/AnimatedBackground'
 
 export default function LoginPage() {
@@ -94,22 +93,6 @@ export default function LoginPage() {
               <Link href="/register" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
                 Daftar di sini
               </Link>
-            </div>
-
-            {/* Copyright & Instagram Link */}
-            <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 text-center">
-              <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mb-3">
-                &copy; {new Date().getFullYear()} Toko Kembar. All rights reserved.
-              </p>
-              <a 
-                href="https://www.instagram.com/wahidysme_" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 hover:bg-pink-50 dark:bg-slate-800/50 dark:hover:bg-pink-500/10 text-slate-500 hover:text-pink-600 dark:text-slate-400 dark:hover:text-pink-400 rounded-xl transition-colors border border-slate-100 dark:border-slate-800 hover:border-pink-200 dark:hover:border-pink-500/30 group text-xs font-bold"
-              >
-                <Instagram size={16} className="group-hover:scale-110 transition-transform" />
-                <span>@wahidysme_ X Toko Kembar</span>
-              </a>
             </div>
 
           </div>
