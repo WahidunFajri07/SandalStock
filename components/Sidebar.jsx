@@ -24,6 +24,7 @@ export default function Sidebar() {
   const { data: session } = useSession()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
   const { theme, setTheme } = useTheme()
   const { lang, toggleLang, t } = useLanguage()
   const [mounted, setMounted] = useState(false)
@@ -77,8 +78,12 @@ export default function Sidebar() {
           )}
           
           {/* User Dropdown */}
-          <div className="relative group">
-            <button className="bg-white dark:bg-slate-900 p-1.5 pr-2 sm:pr-3 rounded-xl shadow-lg border border-slate-200 dark:border-white/10 flex items-center gap-2 transition-all hover:border-blue-500/30 hover:shadow-xl">
+          <div className="relative">
+            <button 
+              onClick={() => setUserMenuOpen(!userMenuOpen)}
+              onBlur={() => setTimeout(() => setUserMenuOpen(false), 200)}
+              className="bg-white dark:bg-slate-900 p-1.5 pr-2 sm:pr-3 rounded-xl shadow-lg border border-slate-200 dark:border-white/10 flex items-center gap-2 transition-all hover:border-blue-500/30 hover:shadow-xl focus:ring-2 focus:ring-blue-500"
+            >
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-[10px] font-black shadow-inner">
                 {session?.user?.name?.slice(0, 2).toUpperCase() || 'UN'}
               </div>
@@ -88,7 +93,7 @@ export default function Sidebar() {
             </button>
             
             {/* Dropdown Menu */}
-            <div className="absolute right-0 top-[calc(100%+0.5rem)] w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.5)] border border-slate-100 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right scale-95 group-hover:scale-100 p-2 overflow-hidden">
+            <div className={`absolute right-0 top-[calc(100%+0.5rem)] w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.5)] border border-slate-100 dark:border-slate-800 transition-all duration-200 transform origin-top-right p-2 overflow-hidden ${userMenuOpen ? 'opacity-100 visible scale-100' : 'opacity-0 invisible scale-95'}`}>
               <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800/80 mb-2">
                 <p className="text-xs font-black text-slate-800 dark:text-white truncate">{session?.user?.name}</p>
                 <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400 dark:text-slate-500 mt-1">{session?.user?.role === 'admin' ? t('roleAdmin') : t('roleStaff')}</p>
@@ -97,7 +102,13 @@ export default function Sidebar() {
                 <UserIcon size={14} />
                 {t('profile')}
               </Link>
-              <button onClick={() => signOut()} className="w-full flex items-center gap-2.5 px-3 py-2 text-sm font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-colors text-left mt-1 border border-transparent hover:border-red-100 dark:hover:border-red-500/20">
+              <button 
+                onClick={() => {
+                  setUserMenuOpen(false);
+                  signOut();
+                }} 
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-colors text-left mt-1 border border-transparent hover:border-red-100 dark:hover:border-red-500/20"
+              >
                 <LogOut size={14} />
                 {t('signOut')}
               </button>
